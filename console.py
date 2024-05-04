@@ -34,13 +34,14 @@ class HBNBCommand(cmd.Cmd):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
             print('(hbnb)')
+    """
 
     def precmd(self, line):
-        """Reformat command line for advanced command syntax.
+        Reformat command line for advanced command syntax.
 
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
-        """
+        
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
         # scan for general formating - i.e '.', '(', ')'
@@ -65,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline.partition(', ')  # pline convert to tuple
 
                 # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
+                #  _id = pline[0].replace('\"', '')
                 # possible bug here:
                 # empty quotes register as empty _id when replaced
 
@@ -73,19 +74,20 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
-
+            print("line")
+            print()
         except Exception as mess:
             pass
         finally:
             return line
-
+    """    
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
@@ -104,6 +106,10 @@ class HBNBCommand(cmd.Cmd):
         """ Handles EOF to exit program """
         print()
         exit()
+    def do_ex(self, arg):
+        """ Handles EOF to exit program """
+        print()
+        exit()
 
     def help_EOF(self):
         """ Prints the help documentation for EOF """
@@ -112,20 +118,43 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
-
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+        try:
+             if not args:
+                print("chech args")
+                raise SyntaxError()
+                return
+             clas_nm = args.split(" ")[0]
+             if clas_nm not in HBNBCommand.classes:
+                print("chech args[0]")
+                raise SyntaxError()
+                return
+             obj = eval(clas_nm)()
+             arg = args.split(" ")
+          
+             for i in range(1, len(arg)):
+                key, value = tuple(arg[i].split("="))
+                if value.startswith('"'):
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                        print(value)
+                        print()
+                    except (SyntaxError, NameError):
+                        continue
+ 
+             if hasattr(obj, key):
+                setattr(obj, key, value)
+             Storage.new(obj)
+             print(obj.id)
+             obj.save()
 
+        except SyntaxError:
+            print("** class name missing check againn !**")
+        except NameError:
+            print("** class doesn't exist why from where this  **")
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -280,10 +309,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
