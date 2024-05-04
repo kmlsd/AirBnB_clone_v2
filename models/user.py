@@ -20,9 +20,16 @@ class User(BaseModel, Base):
         last_name (sqlalchemy String): The user's last name.
   
     """
-    __tablename__ = "users"
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    first_name = Column(String(128))
-    last_name = Column(String(128))
+        __tablename__ = "users"
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+      email = Column(String(128), nullable=False)
+      password = Column(String(128), nullable=False)
+      first_name = Column(String(128))
+      last_name = Column(String(128))
+
+    else:
+        email = ''
+        password = ''
+        first_name = ''
+        last_name = ''
    
