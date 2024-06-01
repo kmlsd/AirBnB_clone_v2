@@ -1,18 +1,16 @@
+
 header {
-	background-color: white;
-	height: 70px;
-	width: 100%;
-	
-	border-bottom: 1px solid #CCCCCC;
+  background: #ffffff url("../images/logo.png") center no-repeat;
+  width: 100%;
+  height: 70px;
+  margin-top: 10px;
 }
 
-#header_logo {
-	height: 100%;
-	width: 142px;
-
-	background-image: url("../images/logo.png");
-	background-repeat: no-repeat;
-	background-position: center;
-
-	margin-left: 20px;
+@media only screen and (min-width: 992px) {
+  header {
+    background: #ffffff url("../images/logo.png") 20px no-repeat;
+    border-bottom: 1px solid #cccccc;
+    margin: 0;
+  }
 }
+
