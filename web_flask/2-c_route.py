@@ -19,7 +19,8 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def c_is_fun(text):
     """ Prints a Message when /c is called """
-    return "C " + text.replace('_', ' ')
+    text = text.replace('_', ' ')
+    return "C {}".format(text)
 
 if __name__ == "__main__":
     """ Main Function """
