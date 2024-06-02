@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """ Starts a Flash Web Application C is FUN"""
 from flask import Flask
